@@ -2,7 +2,7 @@
 authors = ["anxingan"]
 language = "zh"
 src = "src"
-title = "mdbook-docs"
+title = "生活指南"
 
 [output.html]
 smart-punctuation = true

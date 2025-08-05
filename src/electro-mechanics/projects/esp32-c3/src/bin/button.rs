@@ -9,14 +9,16 @@
 use bt_hci::controller::ExternalController;
 use defmt::info;
 use embassy_executor::Spawner;
-use embassy_time::{Duration, Timer};
+use embassy_sync::blocking_mutex::raw::CriticalSectionRawMutex;
+use embassy_sync::signal::Signal;
 use esp_hal::clock::CpuClock;
-use esp_hal::gpio::{Level, Output, OutputConfig};
+use esp_hal::gpio::{Input, InputConfig, Level, Output, OutputConfig, Pull};
 use esp_hal::system::Cpu;
 use esp_hal::timer::systimer::SystemTimer;
 use esp_hal::timer::timg::TimerGroup;
 use esp_wifi::ble::controller::BleConnector;
 use panic_rtt_target as _;
+use static_cell::StaticCell;
 
 extern crate alloc;
 
@@ -24,25 +26,41 @@ extern crate alloc;
 // For more information see: <https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-reference/system/app_image_format.html#application-description>
 esp_bootloader_esp_idf::esp_app_desc!();
 
-#[embassy_executor::task]
-async fn hello_world() {
-    loop {
-        info!("Hello world from embassy using esp-hal-async!");
-        Timer::after(Duration::from_millis(1_000)).await;
-    }
-}
+// 定义LED控制信号
+static LED_CONTROL_SIGNAL: StaticCell<Signal<CriticalSectionRawMutex, bool>> = StaticCell::new();
 
 #[embassy_executor::task]
-async fn blink(mut led: Output<'static>) {
-    info!("Starting blink() on core {}", Cpu::current() as usize);
+// 控制LED状态的任务
+async fn control_led(
+    mut led: Output<'static>,
+    control: &'static Signal<CriticalSectionRawMutex, bool>,
+) {
+    info!("Starting control_led() on core {}", Cpu::current() as usize);
     loop {
+        let _state = control.wait().await;
         led.toggle();
         if led.is_set_low() {
             info!("LED off");
         } else {
             info!("LED on");
         }
-        Timer::after(Duration::from_millis(500)).await;
+    }
+}
+
+#[embassy_executor::task]
+async fn control_button(
+    mut button: Input<'static>,
+    control: &'static Signal<CriticalSectionRawMutex, bool>,
+) {
+    info!(
+        "Starting control_button on core {}",
+        Cpu::current() as usize
+    );
+    loop {
+        // 等待按钮按下事件
+        button.wait_for_falling_edge().await;
+        info!("Button pressed, toggle LED state");
+        control.signal(true);
     }
 }
 
@@ -74,9 +92,15 @@ async fn main(spawner: Spawner) {
     info!("wifi and ble initialized!");
 
     let led = Output::new(peripherals.GPIO18, Level::Low, OutputConfig::default());
+    let button = Input::new(
+        peripherals.GPIO19,
+        InputConfig::default().with_pull(Pull::Up),
+    );
 
     info!("IO initialized!");
 
-    spawner.must_spawn(hello_world());
-    spawner.must_spawn(blink(led));
+    let led_control_signal = &*LED_CONTROL_SIGNAL.init(Signal::new());
+
+    spawner.must_spawn(control_led(led, led_control_signal));
+    spawner.must_spawn(control_button(button, led_control_signal));
 }

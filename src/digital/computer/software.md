@@ -1,0 +1,15 @@
+# 软件清单
+
+- [微信](https://weixin.qq.com)
+- [QQ](https://im.qq.com)
+- [腾讯柠檬](https://lemon.qq.com)
+- [迅雷](https://www.xunlei.com)
+- [Bitwarden](https://bitwarden.com)
+- [Blink Eye](https://blinkeye.app/zh-CN)
+- [snipaste](https://zh.snipaste.com/)
+- [WPS](https://www.wps.cn)
+- [Blender](https://www.blender.org)
+- [ToDesk](https://www.todesk.com)
+- [VS Code](https://code.visualstudio.com)
+- [Github Desktop](https://github.com/apps/desktop)
+- [AnotherRedisDesktopManager](https://github.com/qishibo/AnotherRedisDesktopManager/tree/master)

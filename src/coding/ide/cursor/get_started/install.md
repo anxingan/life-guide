@@ -13,7 +13,7 @@
    ![Cursor官网](../assets/cursor_home.png)
 2. 运行安装程序并完成安装
 
-[cursor]: cursor.com
+[cursor]: https://cursor.com/cn
 
 ## 启动 & 配置 Cursor
 

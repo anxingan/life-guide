@@ -16,6 +16,7 @@
 
 - [手机](./digital/phone/phone.md)
 - [电脑](./digital/computer/computer.md)
+  - [软件清单](./digital/computer/software.md)
 
 # 编程
 

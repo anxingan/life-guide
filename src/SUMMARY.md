@@ -23,7 +23,10 @@
   - [Cursor](./coding/ide/cursor/introduction.md)
   - [Tare](./coding/ide/trae/introduction.md)
 - [编程语言](./coding/language/rust.md)
-- [电子机械](./coding/electro-mechanics/introduction.md)
+
+# 电子机械
+
+- [简介](./electro-mechanics/introduction.md)
 
 # 健康护理
 

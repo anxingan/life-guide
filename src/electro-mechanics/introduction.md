@@ -15,16 +15,18 @@
 
 ## 优秀的资源清单
 
-| 资源                                        | 描述                                          |
-| ------------------------------------------- | --------------------------------------------- |
-| [The Rust Programming Language][rust-book]  | 如果你不熟悉 Rust，我们建议你先阅读这本书。   |
-| [The Rust on ESP Book][rust-esp-book]       | 将 Rust 用于乐鑫（Espressif）设备的全面指南。 |
-| [Embassy Book][embassy-book]                | 面向嵌入式应用的框架。                        |
-| [嘉立创 EDA 教育与开源文档中心][jlc-course] | PCB 设计与生产、电子设计项目实战              |
+| 资源                                        | 描述                                                |
+| ------------------------------------------- | --------------------------------------------------- |
+| [The Rust Programming Language][rust-book]  | 如果你不熟悉 Rust，我们建议你先阅读这本书。         |
+| [The Rust on ESP Book][rust-esp-book]       | 将 Rust 用于乐鑫（Espressif）设备的全面指南。       |
+| [Embassy Book][embassy-book]                | 面向嵌入式应用的框架。                              |
+| [impl Rust for ESP32][impl-rust-for-esp32]  | 使用 ESP32 DevKit v1 和 Rust 来构建简单而有趣的项目 |
+| [嘉立创 EDA 教育与开源文档中心][jlc-course] | PCB 设计与生产、电子设计项目实战                    |
 
 [rust-book]: https://doc.rust-lang.org/book/
 [rust-esp-book]: https://docs.espressif.com/projects/rust/book/
 [embassy-book]: https://embassy.dev/book/
+[impl-rust-for-esp32]: https://esp32.implrust.com/
 [jlc-course]: https://wiki.lceda.cn/zh-hans/
 
 ## 软件推荐

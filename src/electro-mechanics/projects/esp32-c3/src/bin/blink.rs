@@ -19,6 +19,7 @@ use esp_wifi::ble::controller::BleConnector;
 use panic_rtt_target as _;
 
 extern crate alloc;
+use esp32_c3 as lib;
 
 // This creates a default app-descriptor required by the esp-idf bootloader.
 // For more information see: <https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-reference/system/app_image_format.html#application-description>
@@ -29,20 +30,6 @@ async fn hello_world() {
     loop {
         info!("Hello world from embassy using esp-hal-async!");
         Timer::after(Duration::from_millis(1_000)).await;
-    }
-}
-
-#[embassy_executor::task]
-async fn blink(mut led: Output<'static>) {
-    info!("Starting blink() on core {}", Cpu::current() as usize);
-    loop {
-        led.toggle();
-        if led.is_set_low() {
-            info!("LED off");
-        } else {
-            info!("LED on");
-        }
-        Timer::after(Duration::from_millis(500)).await;
     }
 }
 
@@ -75,8 +62,8 @@ async fn main(spawner: Spawner) {
 
     let led = Output::new(peripherals.GPIO18, Level::Low, OutputConfig::default());
 
-    info!("IO initialized!");
+    info!("Peripherals initialized!");
 
     spawner.must_spawn(hello_world());
-    spawner.must_spawn(blink(led));
+    spawner.must_spawn(lib::led::blink(led));
 }

@@ -256,14 +256,31 @@ dependencies = [
 
 [[package]]
 name = "embassy-embedded-hal"
-version = "0.3.1"
+version = "0.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8578db196d74db92efdd5ebc546736dac1685499ee245b22eff92fa5e4b57945"
+checksum = "8c62a3bf127e03832fb97d8b01a058775e617653bc89e2a12c256485a7fb54c1"
+dependencies = [
+ "embassy-embedded-hal 0.4.0",
+ "embassy-futures",
+ "embassy-sync 0.6.2",
+ "embassy-time",
+ "embedded-hal 0.2.7",
+ "embedded-hal 1.0.0",
+ "embedded-hal-async",
+ "embedded-storage",
+ "embedded-storage-async",
+ "nb 1.1.0",
+]
+
+[[package]]
+name = "embassy-embedded-hal"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d1611b7a7ab5d1fbed84c338df26d56fd9bded58006ebb029075112ed2c5e039"
 dependencies = [
  "embassy-futures",
  "embassy-hal-internal",
  "embassy-sync 0.7.0",
- "embassy-time",
  "embedded-hal 0.2.7",
  "embedded-hal 1.0.0",
  "embedded-hal-async",
@@ -364,7 +381,6 @@ checksum = "cef1a8a1ea892f9b656de0295532ac5d8067e9830d49ec75076291fd6066b136"
 dependencies = [
  "cfg-if",
  "critical-section",
- "defmt 1.0.1",
  "embedded-io-async",
  "futures-sink",
  "futures-util",
@@ -498,33 +514,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "embedded-test"
-version = "0.6.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ebf10fe8d8fcdca0d69d961e2ffdc51b5101811649342078d4efa8ca2370fe17"
-dependencies = [
- "defmt 1.0.1",
- "embassy-executor",
- "embedded-test-macros",
- "heapless",
- "semihosting",
- "serde",
- "serde-json-core",
-]
-
-[[package]]
-name = "embedded-test-macros"
-version = "0.6.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "832520ef06a9dd2970a9106f94aca45dc47b746d14dbecc0819a47a7b5c1b5be"
-dependencies = [
- "darling",
- "proc-macro2",
- "quote",
- "syn",
-]
-
-[[package]]
 name = "enumset"
 version = "1.1.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -610,7 +599,7 @@ dependencies = [
  "delegate",
  "digest",
  "document-features",
- "embassy-embedded-hal",
+ "embassy-embedded-hal 0.3.2",
  "embassy-futures",
  "embassy-sync 0.6.2",
  "embedded-can",
@@ -626,7 +615,7 @@ dependencies = [
  "esp-rom-sys",
  "esp32",
  "esp32c2",
- "esp32c3",
+ "esp32c3 0.30.0",
  "esp32c6",
  "esp32h2",
  "esp32s2",
@@ -781,7 +770,18 @@ dependencies = [
 ]
 
 [[package]]
-name = "esp32-c3"
+name = "esp32c2"
+version = "0.27.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "da1bcf86fca83543e0e95561cba27bbcc6b6e7adc5428f49187f5868bc0c3ed2"
+dependencies = [
+ "critical-section",
+ "defmt 1.0.1",
+ "vcell",
+]
+
+[[package]]
+name = "esp32c3"
 version = "0.1.0"
 dependencies = [
  "bt-hci 0.2.1",
@@ -793,7 +793,6 @@ dependencies = [
  "embassy-time",
  "embedded-io",
  "embedded-io-async",
- "embedded-test",
  "esp-alloc",
  "esp-bootloader-esp-idf",
  "esp-hal",
@@ -804,17 +803,6 @@ dependencies = [
  "smoltcp",
  "static_cell",
  "trouble-host",
-]
-
-[[package]]
-name = "esp32c2"
-version = "0.27.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "da1bcf86fca83543e0e95561cba27bbcc6b6e7adc5428f49187f5868bc0c3ed2"
-dependencies = [
- "critical-section",
- "defmt 1.0.1",
- "vcell",
 ]
 
 [[package]]
@@ -1413,28 +1401,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "94143f37725109f92c262ed2cf5e59bce7498c01bcc1502d7b9afe439a4e9f49"
 
 [[package]]
-name = "semihosting"
-version = "0.1.20"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c3e1c7d2b77d80283c750a39c52f1ab4d17234e8f30bca43550f5b2375f41d5f"
-
-[[package]]
 name = "serde"
 version = "1.0.219"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5f0e2c6ed6606019b4e29e69dbaba95b11854410e5347d525002456dbbb786b6"
 dependencies = [
  "serde_derive",
-]
-
-[[package]]
-name = "serde-json-core"
-version = "0.6.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5b81787e655bd59cecadc91f7b6b8651330b2be6c33246039a65e5cd6f4e0828"
-dependencies = [
- "ryu",
- "serde",
 ]
 
 [[package]]

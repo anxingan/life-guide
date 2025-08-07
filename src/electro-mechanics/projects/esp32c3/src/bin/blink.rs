@@ -9,28 +9,24 @@
 use bt_hci::controller::ExternalController;
 use defmt::info;
 use embassy_executor::Spawner;
-use embassy_sync::blocking_mutex::raw::CriticalSectionRawMutex;
-use embassy_sync::signal::Signal;
 use esp_hal::clock::CpuClock;
-use esp_hal::gpio::{Input, InputConfig, Level, Output, OutputConfig, Pull};
+use esp_hal::gpio::{Level, Output, OutputConfig};
 use esp_hal::timer::systimer::SystemTimer;
 use esp_hal::timer::timg::TimerGroup;
 use esp_wifi::ble::controller::BleConnector;
 use panic_rtt_target as _;
 
 extern crate alloc;
-
-use esp32_c3 as lib;
+use esp32c3 as lib;
 
 // This creates a default app-descriptor required by the esp-idf bootloader.
 // For more information see: <https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-reference/system/app_image_format.html#application-description>
 esp_bootloader_esp_idf::esp_app_desc!();
 
-// 定义LED控制信号
-static LED_CONTROL_SIGNAL: Signal<CriticalSectionRawMutex, bool> = Signal::new();
-
 #[esp_hal_embassy::main]
 async fn main(spawner: Spawner) {
+    // generator version: 0.5.0
+
     rtt_target::rtt_init_defmt!();
 
     let config = esp_hal::Config::default().with_cpu_clock(CpuClock::max());
@@ -54,17 +50,11 @@ async fn main(spawner: Spawner) {
     // find more examples https://github.com/embassy-rs/trouble/tree/main/examples/esp32
     let transport = BleConnector::new(&wifi_init, peripherals.BT);
     let _ble_controller = ExternalController::<_, 20>::new(transport);
-
     info!("wifi and ble initialized!");
 
     let led = Output::new(peripherals.GPIO18, Level::Low, OutputConfig::default());
-    let button = Input::new(
-        peripherals.GPIO19,
-        InputConfig::default().with_pull(Pull::Up),
-    );
 
     info!("Peripherals initialized!");
 
-    spawner.must_spawn(lib::led::led_signal(led, &LED_CONTROL_SIGNAL));
-    spawner.must_spawn(lib::button::button_signal(button, &LED_CONTROL_SIGNAL));
+    spawner.must_spawn(lib::led::blink(led));
 }

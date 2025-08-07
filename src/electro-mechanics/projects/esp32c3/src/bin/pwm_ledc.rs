@@ -1,8 +1,3 @@
-//! pwm-ledc
-//!
-//! 将使用 ABPClock 将低速通道 0 配置为 24kHz 输出，占空比为 10%，并打开 LED，
-//! 并可选择根据占空比值更改 LED 强度。可能的值 （u32） 在 0..100 范围内。
-
 #![no_std]
 #![no_main]
 #![deny(
@@ -25,8 +20,7 @@ use esp_wifi::ble::controller::BleConnector;
 use panic_rtt_target as _;
 
 extern crate alloc;
-
-use esp32_c3 as lib;
+use esp32c3 as lib;
 
 // This creates a default app-descriptor required by the esp-idf bootloader.
 // For more information see: <https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-reference/system/app_image_format.html#application-description>
@@ -34,6 +28,8 @@ esp_bootloader_esp_idf::esp_app_desc!();
 
 #[esp_hal_embassy::main]
 async fn main(spawner: Spawner) {
+    // generator version: 0.5.0
+
     rtt_target::rtt_init_defmt!();
 
     let config = esp_hal::Config::default().with_cpu_clock(CpuClock::max());

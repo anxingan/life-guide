@@ -43,15 +43,3 @@ pub async fn led_signal(
         }
     }
 }
-
-#[embassy_executor::task]
-// LED呼吸灯
-pub async fn led_fader(channel0: &'static channel::Channel<'static, LowSpeed>) {
-    info!("Starting led_fader() on core {}", Cpu::current() as usize);
-    loop {
-        channel0.start_duty_fade(0, 100, 1000).unwrap();
-        while channel0.is_duty_fade_running() {}
-        channel0.start_duty_fade(100, 0, 1000).unwrap();
-        while channel0.is_duty_fade_running() {}
-    }
-}

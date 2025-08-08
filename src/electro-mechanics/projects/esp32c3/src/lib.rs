@@ -1,7 +1,10 @@
 #![no_std]
 
 pub mod button;
+pub mod buzzer;
 pub mod led;
+pub mod ledc;
+pub mod music;
 
 #[macro_export]
 macro_rules! mk_static {

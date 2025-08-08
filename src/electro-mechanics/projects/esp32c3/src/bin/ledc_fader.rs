@@ -10,10 +10,8 @@ use bt_hci::controller::ExternalController;
 use defmt::info;
 use embassy_executor::Spawner;
 use esp_hal::clock::CpuClock;
-use esp_hal::ledc::channel::ChannelIFace;
-use esp_hal::ledc::timer::TimerIFace;
-use esp_hal::ledc::{channel, timer, LSGlobalClkSource, Ledc, LowSpeed};
-use esp_hal::time::Rate;
+use esp_hal::gpio::{Level, Output, OutputConfig};
+use esp_hal::ledc::Ledc;
 use esp_hal::timer::systimer::SystemTimer;
 use esp_hal::timer::timg::TimerGroup;
 use esp_wifi::ble::controller::BleConnector;
@@ -56,35 +54,11 @@ async fn main(spawner: Spawner) {
     info!("wifi and ble initialized!");
 
     // LED Pin
-    let led = peripherals.GPIO18;
+    let led = Output::new(peripherals.GPIO18, Level::Low, OutputConfig::default());
 
-    // pwm config
-    let mut ledc = Ledc::new(peripherals.LEDC);
-    ledc.set_global_slow_clock(LSGlobalClkSource::APBClk);
-    let lstimer0 = lib::mk_static!(
-        timer::Timer<'static, LowSpeed>,
-        ledc.timer::<LowSpeed>(timer::Number::Timer0)
-    );
-    lstimer0
-        .configure(timer::config::Config {
-            duty: timer::config::Duty::Duty5Bit,
-            clock_source: timer::LSClockSource::APBClk,
-            frequency: Rate::from_khz(24),
-        })
-        .expect("failed to configure ledc timer");
-    let chan0 = lib::mk_static!(
-        channel::Channel<'static, LowSpeed>,
-        ledc.channel(channel::Number::Channel0, led)
-    );
-    chan0
-        .configure(channel::config::Config {
-            timer: lstimer0,
-            duty_pct: 10,
-            pin_config: channel::config::PinConfig::PushPull,
-        })
-        .expect("failed to configure ledc channel");
-
+    // ledc
+    let ledc = Ledc::new(peripherals.LEDC);
     info!("Peripherals initialized!");
 
-    spawner.must_spawn(lib::led::led_fader(chan0));
+    spawner.must_spawn(lib::ledc::ledc_led(ledc, led));
 }
